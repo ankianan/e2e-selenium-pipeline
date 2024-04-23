@@ -12,11 +12,15 @@ describe("Test the WebElement for oj-input-text", function () {
     );
   });
 
-  it.only("check Value Property", async function () {
-    let ojWebElement = await driver.findElement(By.id("text-input"));
-    await driver.wait(until.elementIsVisible(ojWebElement));
+  it("check Value Property", async function () {
+    const locater = By.id("text-input");
+    let ojWebElement = await findElement(driver, locater);
+
+    
     expect(await ojWebElement.getAttribute("value")).toBe("Green");
 
+    
+    //2nd way to get element value
     expect(await driver.executeScript(`
       const [element] = arguments;
       return element.getProperty('value');
@@ -24,8 +28,22 @@ describe("Test the WebElement for oj-input-text", function () {
 
     
 
+    //3rd way to get element value
     let nativeElement = await ojWebElement.findElement(By.css("#text-input input"));
     expect(await nativeElement.getAttribute("value")).toBe("Green");
+  });
+
+  it("check Value Property", async function () {
+    const locater = By.id("text-input");
+    let ojWebElement = await findElement(driver, locater);
+
+    
+    await driver.executeScript(`
+        const [element] = arguments;
+        return element.setProperty('value', "Yellow");
+      `, ojWebElement);
+
+    expect(await ojWebElement.getAttribute("value")).toBe("Yellow");
   });
 
   
@@ -34,4 +52,10 @@ describe("Test the WebElement for oj-input-text", function () {
   });
 });
 
+
+async function findElement(driver: WebDriver, locater: By) {
+  let ojWebElement = await driver.findElement(locater);
+  await driver.wait(until.elementIsVisible(ojWebElement));
+  return ojWebElement;
+}
 
