@@ -6,7 +6,7 @@ describe("Test the WebElement for oj-input-text", function () {
   beforeAll(async function () {
     driver = await new Builder()
         .forBrowser(Browser.CHROME)
-        .setChromeOptions(new chrome.Options().addArguments('--headless=new'))
+        //.setChromeOptions(new chrome.Options().addArguments('--headless=new'))
         .build();
     
     await driver.get(
@@ -15,11 +15,17 @@ describe("Test the WebElement for oj-input-text", function () {
   });
 
   it("check Value Property", async function () {
-    let c = await driver.findElement( By.id("text-input"));
-    await driver.wait(async ()=>{
-      let rawProp1 = await c.getAttribute("value");
-      return rawProp1 === "Green";
-    })
+    let c = await driver.findElement( By.id("text-input|input"));
+    expect(await c.getAttribute("value")).toBe("Green");
+    
+    
+  });
+
+  it("check Value Property", async function () {
+    let c = await driver.findElement( By.id("text-input|input"));
+    await c.clear();
+    await c.sendKeys("Hello");
+    expect(await c.getAttribute("value")).toBe("Hello");
     
   });
 
