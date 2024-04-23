@@ -16,8 +16,11 @@ describe("Test the WebElement for oj-input-text", function () {
 
   it("check Value Property", async function () {
     let c = await driver.findElement( By.id("text-input"));
-    let rawProp1 = await c.getAttribute("value");
-    expect(rawProp1).toEqual("Green");
+    await driver.wait(async ()=>{
+      let rawProp1 = await c.getAttribute("value");
+      return rawProp1 === "Green";
+    })
+    
   });
 
   afterAll(function () {
