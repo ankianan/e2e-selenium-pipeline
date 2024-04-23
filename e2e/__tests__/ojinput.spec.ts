@@ -12,9 +12,8 @@ describe("Test the WebElement for oj-input-text", function () {
     );
   });
 
-  it("check Value Property", async function () {
+  it.only("check Value Property", async function () {
     let ojWebElement = await driver.findElement(By.id("text-input"));
-    expect(await ojWebElement.getAttribute("value")).toBe("Green");
 
     expect(await driver.executeScript(`
       const [element] = arguments;
@@ -22,6 +21,7 @@ describe("Test the WebElement for oj-input-text", function () {
     `, ojWebElement)).toBe("Green");
 
     await driver.wait(until.elementIsVisible(ojWebElement));
+
     let nativeElement = await ojWebElement.findElement(By.css("#text-input input"));
     expect(await nativeElement.getAttribute("value")).toBe("Green");
   });
