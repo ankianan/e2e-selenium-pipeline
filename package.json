@@ -4,7 +4,8 @@
   "description": "test push",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "TEST_ENV=CI npx jest",
+    "test:dev": "TEST_ENV=DEV npx jest"
   },
   "author": "",
   "license": "ISC",

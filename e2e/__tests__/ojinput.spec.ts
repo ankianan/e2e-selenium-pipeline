@@ -1,6 +1,7 @@
 import { By, WebDriver, until } from "selenium-webdriver";
-import chrome from 'selenium-webdriver/chrome';
-import { getDriver } from "./getDriver";
+import { getDriver } from "../utils/DriverManager";
+import { releaseDriver } from "../utils/DriverManager";
+import { TEST_ENV, config } from "../utils/config";
 describe("Test the WebElement for oj-input-text", function () {
   let driver: WebDriver;
 
@@ -44,12 +45,14 @@ describe("Test the WebElement for oj-input-text", function () {
       `, ojWebElement);
 
     expect(await ojWebElement.getAttribute("value")).toBe("Yellow");
-    await require('fs').writeFileSync('./image.png', await driver.takeScreenshot(), 'base64');
+    if(config.testEnv === TEST_ENV.CI){
+      await require('fs').writeFileSync('./image.png', await driver.takeScreenshot(), 'base64');
+    }
   });
 
   
   afterAll(async function () {
-    await driver?.quit()
+    await releaseDriver(driver);
   });
 });
 
