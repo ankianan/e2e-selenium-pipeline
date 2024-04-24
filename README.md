@@ -1,3 +1,4 @@
 # e2e-selenium-pipeline
 
-test push
+This demo is to test CI/CD pipeline for selenium-driver JS
+
