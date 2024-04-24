@@ -4,7 +4,7 @@ import firefox from 'selenium-webdriver/firefox';
 export async function getDriver() {
   //@ts-ignore
   const chromOptions = new chrome.Options().enableBidi();
-    //chromOptions.addArguments('--headless=new');
+    chromOptions.addArguments('--headless=new');
                             
   let driver = await new Builder()
     .forBrowser(Browser.CHROME)
