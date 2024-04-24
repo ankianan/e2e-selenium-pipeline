@@ -1,9 +1,8 @@
-import { getDriver, getDriverBidi, releaseDriver } from "../utils/DriverManager"
-
+import { getDriverBidi, releaseDriver } from "../utils/DriverManager"
+import {By, Key, LogInspector} from "selenium-webdriver";
+import Input from 'selenium-webdriver/bidi/input';
+import BrowsingContext  from 'selenium-webdriver/bidi/browsingContext';
 const assert = require("assert")
-const {By, Key} = require("selenium-webdriver")
-const Input = require('selenium-webdriver/bidi/input')
-const BrowsingContext = require('selenium-webdriver/bidi/browsingContext');
 
 describe('Bidi', function(){
     let driver;
@@ -32,7 +31,7 @@ describe('Bidi', function(){
         })
     })
 
-    it('can take screenshot', async function () {
+    test('can take screenshot', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
             browsingContextId: id,
@@ -45,6 +44,28 @@ describe('Bidi', function(){
         let pngMagicNumber = 'iVBOR'
         assert.equal(base64code, pngMagicNumber)
         await require('fs').writeFileSync('./image-bidi.png', response, 'base64');
+    })
+
+    test('test listen to console log', async function () {
+        let logEntry = null
+        const inspector = await LogInspector(driver)
+        await inspector.onConsoleEntry(function (log) {
+            logEntry = log
+        })
+
+        await driver.get('https://www.selenium.dev/selenium/web/bidi/logEntryAdded.html')
+        await driver.findElement({id: 'consoleLog'}).click()
+
+        await driver.wait(()=>logEntry);
+        assert.equal(logEntry.text, 'Hello, world!')
+        assert.equal(logEntry.realm, null)
+        assert.equal(logEntry.type, 'console')
+        assert.equal(logEntry.level, 'info')
+        assert.equal(logEntry.method, 'log')
+        //assert.equal(logEntry.stackTrace, null)
+        assert.equal(logEntry.args.length, 1)
+
+        await inspector.close()
     })
 
     afterAll(async ()=>{

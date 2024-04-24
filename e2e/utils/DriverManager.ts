@@ -24,7 +24,7 @@ export async function getDriver() {
     
           
     let driver = await new Builder()
-    .forBrowser(Browser.FIREFOX)
+    .forBrowser(Browser.CHROME)
     .setChromeOptions(chromOptions)
     .setFirefoxOptions(firefoxOptions)
     .build();
@@ -48,13 +48,18 @@ export async function getDriverBidi() {
   
     if(config.testEnv === TEST_ENV.CI){
 
-        chromOptions.addArguments('--headless=new');
+        chromOptions.addArguments('--headless=new')
+        chromOptions.addArguments('--disable-dev-shm-usage')
+        chromOptions.addArguments('--disable-gpu')
+        //chromOptions.addArguments('--screenshot')
+        
+
         firefoxOptions.addArguments('--headless');
     }
     
           
     let driver = await new Builder()
-    .forBrowser(Browser.FIREFOX)
+    .forBrowser(Browser.CHROME)
     .setChromeOptions(chromOptions)
     .setFirefoxOptions(firefoxOptions)
     .build();
