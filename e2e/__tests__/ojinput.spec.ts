@@ -44,6 +44,7 @@ describe("Test the WebElement for oj-input-text", function () {
       `, ojWebElement);
 
     expect(await ojWebElement.getAttribute("value")).toBe("Yellow");
+    await require('fs').writeFileSync('./image.png', await driver.takeScreenshot(), 'base64');
   });
 
   
