@@ -43,7 +43,7 @@ describe('Bidi', function(){
         const base64code = response.slice(startIndex, endIndex);
         let pngMagicNumber = 'iVBOR'
         assert.equal(base64code, pngMagicNumber)
-        await require('fs').writeFileSync('./image-bidi.png', response, 'base64');
+        await require('fs').writeFileSync('./output/image-bidi.png', response, 'base64');
     })
 
     test('test listen to console log', async function () {

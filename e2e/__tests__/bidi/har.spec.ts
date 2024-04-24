@@ -28,7 +28,7 @@ describe('Record HAR', ()=>{
         // Save the HAR data to a .har file
         const harData = JSON.stringify(harExport, null, "  ");
         const filename = `http_archive_${new Date().toISOString()}`;
-        fs.writeFileSync(`./your-har-export.har`, harData);
+        fs.writeFileSync(`./output/your-har-export.har`, harData);
     });
 
     afterAll(async ()=>{
