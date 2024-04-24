@@ -1,15 +1,14 @@
-import { getDriver } from "./getDriver"
+import { getDriver, getDriverBidi, releaseDriver } from "../utils/DriverManager"
 
-const {suite} = require('selenium-webdriver/testing')
 const assert = require("assert")
-const firefox = require('selenium-webdriver/firefox')
 const {By, Key} = require("selenium-webdriver")
 const Input = require('selenium-webdriver/bidi/input')
+const BrowsingContext = require('selenium-webdriver/bidi/browsingContext');
 
 describe('Bidi', function(){
     let driver;
     beforeAll(async ()=>{
-        driver = await getDriver();
+        driver = await getDriverBidi();
     })
 
 
@@ -33,8 +32,23 @@ describe('Bidi', function(){
         })
     })
 
+    it('can take screenshot', async function () {
+        const id = await driver.getWindowHandle()
+        const browsingContext = await BrowsingContext(driver, {
+            browsingContextId: id,
+        })
+
+        const response = await browsingContext.captureScreenshot()
+        let startIndex = 0
+        let endIndex = 5
+        const base64code = response.slice(startIndex, endIndex);
+        let pngMagicNumber = 'iVBOR'
+        assert.equal(base64code, pngMagicNumber)
+        await require('fs').writeFileSync('./image-bidi.png', response, 'base64');
+    })
+
     afterAll(async ()=>{
-        await driver?.quit()
+        await releaseDriver(driver);
     })
 
 });

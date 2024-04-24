@@ -1,7 +1,7 @@
 import { Builder, By, until, WebDriver } from "selenium-webdriver";
 
 
-import { getDriver } from "./getDriver";
+import { getDriver, releaseDriver } from "../utils/DriverManager";
 
 describe("Test Select Single Basic (:Cookbook:)", function () {
   let driver: WebDriver;
@@ -48,6 +48,6 @@ describe("Test Select Single Basic (:Cookbook:)", function () {
   });
 
   afterAll(async function () {
-    await driver.quit()
+    await releaseDriver(driver);
   });
 });
