@@ -1,4 +1,4 @@
-import { getDriverBidi, releaseDriver } from "../utils/DriverManager"
+import { getDriverBidi, releaseDriver } from "../../utils/DriverManager"
 import {By, Key, LogInspector} from "selenium-webdriver";
 import Input from 'selenium-webdriver/bidi/input';
 import BrowsingContext  from 'selenium-webdriver/bidi/browsingContext';
