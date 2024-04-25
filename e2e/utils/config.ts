@@ -26,8 +26,8 @@ const baseConfig = {
     browserConfig: {
         [Browser.CHROME] : {
             debugPort: 9222,
-            videoRecordingSupport: STATUS.SUPPORTED,
-            webDriverBidiSupport: STATUS.UNSTABLE_HEADLESS,
+            videoRecordingSupport: STATUS.DISABLED, //TODO: Install FFMpeg in CI
+            webDriverBidiSupport: STATUS.SUPPORTED,
             get recordingTabIndex(){
                 const isBidiEnabled = this.webDriverBidiSupport;
                 return isBidiEnabled?1:0;
@@ -36,7 +36,7 @@ const baseConfig = {
         [Browser.FIREFOX] : {
             debugPort: 9222,
             videoRecordingSupport: STATUS.NOT_SUPPORTED,
-            webDriverBidiSupport: STATUS.DISABLED,
+            webDriverBidiSupport: STATUS.SUPPORTED,
             recordingTabIndex: 0
         }
     },
