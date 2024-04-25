@@ -16,9 +16,12 @@ jobs:
       - name: Install modules
         run: |
           npm i
-      - name: Run test
+      - name: Run test on firefox
         run: |
-          npm run test
+          npm run test:ff
+      - name: Run test on chrome
+        run: |
+          npm run test:ch
       - name: List files in the repository
         run: |
           ls ${{ github.workspace }}/output

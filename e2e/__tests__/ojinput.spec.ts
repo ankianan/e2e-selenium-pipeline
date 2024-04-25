@@ -1,11 +1,11 @@
 import { By, WebDriver, until } from "selenium-webdriver";
 import { getDriver } from "../utils/DriverManager";
 import { releaseDriver } from "../utils/DriverManager";
-import { TEST_ENV, config } from "../utils/config";
+
 describe("Test the WebElement for oj-input-text", function () {
   let driver: WebDriver;
 
-  beforeAll(async function () {
+  beforeEach(async function () {
     driver = await getDriver();
     
     await driver.get(
@@ -45,13 +45,11 @@ describe("Test the WebElement for oj-input-text", function () {
       `, ojWebElement);
 
     expect(await ojWebElement.getAttribute("value")).toBe("Yellow");
-    if(config.testEnv === TEST_ENV.CI){
-      await require('fs').writeFileSync('./output/image.png', await driver.takeScreenshot(), 'base64');
-    }
+    await require('fs').writeFileSync('./output/image.png', await driver.takeScreenshot(), 'base64');
   });
 
   
-  afterAll(async function () {
+  afterEach(async function () {
     await releaseDriver(driver);
   });
 });

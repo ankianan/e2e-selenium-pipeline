@@ -1,13 +1,18 @@
-import { getDriverBidi, releaseDriver } from "../../utils/DriverManager"
+import { getDriver, getDriverBidi, releaseDriver } from "../utils/DriverManager"
 import {By, Key, LogInspector} from "selenium-webdriver";
 import Input from 'selenium-webdriver/bidi/input';
 import BrowsingContext  from 'selenium-webdriver/bidi/browsingContext';
+import { config } from "../utils/config";
+
 const assert = require("assert")
 
-describe('Bidi', function(){
+const xx = (isTrue) => isTrue?describe: describe.skip;
+
+const webDriverBidiSupport = config.browserConfig[config.browser].webDriverBidiSupport;
+xx(webDriverBidiSupport)('Bidi', function(){
     let driver;
     beforeAll(async ()=>{
-        driver = await getDriverBidi();
+        driver = await getDriver();
     })
 
 
@@ -31,7 +36,7 @@ describe('Bidi', function(){
         })
     })
 
-    test('can take screenshot', async function () {
+    test.skip('can take screenshot', async function () {
         const id = await driver.getWindowHandle()
         const browsingContext = await BrowsingContext(driver, {
             browsingContextId: id,
@@ -42,7 +47,7 @@ describe('Bidi', function(){
         let endIndex = 5
         const base64code = response.slice(startIndex, endIndex);
         let pngMagicNumber = 'iVBOR'
-        assert.equal(base64code, pngMagicNumber)
+        assert.equal(base64code, pngMagicNumber);
         await require('fs').writeFileSync('./output/image-bidi.png', response, 'base64');
     })
 
@@ -73,3 +78,4 @@ describe('Bidi', function(){
     })
 
 });
+

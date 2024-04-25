@@ -1,12 +1,17 @@
-import { getDriverBidi, releaseDriver } from '../../utils/DriverManager';
+import { getDriver, getDriverBidi, releaseDriver } from '../utils/DriverManager';
 import fs from 'node:fs';
 import BrowsingContext  from 'selenium-webdriver/bidi/browsingContext';
 import { adapters } from 'bidi-har-export';
+import { config } from '../utils/config';
 
-describe('Record HAR', ()=>{
+const xx = (isTrue) => isTrue?describe: describe.skip;
+
+const webDriverBidiSupport = config.browserConfig[config.browser].webDriverBidiSupport;
+
+xx(webDriverBidiSupport)('Record HAR', ()=>{
     let driver;
     beforeAll(async ()=>{
-        driver = await getDriverBidi();
+        driver = await getDriver();
 
         const id = await driver.getWindowHandle();
         const browsingContext = await BrowsingContext(driver, { browsingContextId: id });
