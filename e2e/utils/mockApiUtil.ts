@@ -4,7 +4,7 @@ import { AddInterceptParameters } from "selenium-webdriver/bidi/addInterceptPara
 import { InterceptPhase } from "selenium-webdriver/bidi/interceptPhase";
 import { BytesValue } from 'selenium-webdriver/bidi/networkTypes';
 import { ProvideResponseParameters } from "selenium-webdriver/bidi/provideResponseParameters";
-import {WebDriver} from 'selenium-webdriver';
+import {Browser, WebDriver} from 'selenium-webdriver';
 
 
 export async function mockApi(driver: WebDriver, urlStr: string, mockReponse: any) {
@@ -34,13 +34,21 @@ function createProvideResponseParameters(event: any, response: string, network: 
     return prp;
 }
 
-function createAddInterceptParameters(url: URL) {
+async function createAddInterceptParameters(url: URL, driver: WebDriver) {
     const aip = new AddInterceptParameters(InterceptPhase.BEFORE_REQUEST_SENT);
     const urlPattern = new UrlPattern();
     
     // Harcoding protocol as it gives error in firefox for  colon ":"
-    urlPattern.protocol(url.protocol);
-    //urlPattern.protocol('https');
+    
+    const browsername = (await driver.getCapabilities()).getBrowserName();
+    if(browsername === Browser.FIREFOX){
+        //stripg colon
+        urlPattern.protocol(url.protocol.match(/[^:]*/)[0]);
+    }else{
+        urlPattern.protocol(url.protocol);
+    }
+    
+    
     urlPattern.hostname(url.hostname);
     url.port?urlPattern.port(parseInt(url.port)):'';
     urlPattern.pathname(url.pathname);
