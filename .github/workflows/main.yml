@@ -17,9 +17,11 @@ jobs:
         run: |
           npm i
       - name: Run test on firefox
+        if: always()
         run: |
           npm run test:ff
       - name: Run test on chrome
+        if: always()
         run: |
           npm run test:ch
       - name: List files in the repository

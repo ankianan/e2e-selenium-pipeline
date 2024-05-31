@@ -14,9 +14,8 @@ export async function mockApi(driver: WebDriver, urlStr: string, mockReponse: an
     const network = await Network(driver);
     const interceptId = await network.addIntercept(aip);
     
-    await network.beforeRequestSent(async function (event) {
+    await network.beforeRequestSent(function (event) {
         if (event?.request.url === urlStr) {
-            console.log(event.request.url);
             const prp = createProvideResponseParameters(event, JSON.stringify(mockReponse), network);
             network.provideResponse(prp)
             console.log('response provided:', event.request.url)
