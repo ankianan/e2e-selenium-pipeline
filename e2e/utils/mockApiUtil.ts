@@ -10,7 +10,7 @@ import {Browser, WebDriver} from 'selenium-webdriver';
 export async function mockApi(driver: WebDriver, urlStr: string, mockReponse: any) {
     
     const url = new URL(urlStr);
-    const aip = createAddInterceptParameters(url);
+    const aip = createAddInterceptParameters(url, driver);
     const network = await Network(driver);
     const interceptId = await network.addIntercept(aip);
     
