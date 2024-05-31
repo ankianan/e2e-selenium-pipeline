@@ -1,20 +1,19 @@
 import { getDriver, getDriverBidi, releaseDriver } from "../utils/DriverManager"
-import {By, Key, LogInspector} from "selenium-webdriver";
+import {By, Key, LogInspector, WebDriver} from "selenium-webdriver";
 import Input from 'selenium-webdriver/bidi/input';
 import BrowsingContext  from 'selenium-webdriver/bidi/browsingContext';
 import { config } from "../utils/config";
+import { mockApi } from "../utils/mockApiUtil";
 
 const assert = require("assert")
 
 const xx = (isTrue) => isTrue?describe: describe.skip;
-
 const webDriverBidiSupport = config.browserConfig[config.browser].webDriverBidiSupport;
 xx(webDriverBidiSupport)('Bidi', function(){
-    let driver;
+    let driver:WebDriver;
     beforeAll(async ()=>{
         driver = await getDriver();
     })
-
 
     test('Input', async ()=>{
         const browsingContextId = await driver.getWindowHandle()
@@ -23,6 +22,7 @@ xx(webDriverBidiSupport)('Bidi', function(){
 
         let options = await driver.findElements(By.tagName('option'))
 
+        //@ts-ignore
         const actions = driver.actions().click(options[1]).keyDown(Key.SHIFT).click(options[3]).keyUp(Key.SHIFT).getSequences()
 
         await input.perform(browsingContextId, actions)
@@ -71,6 +71,29 @@ xx(webDriverBidiSupport)('Bidi', function(){
         assert.equal(logEntry.args.length, 1)
 
         await inspector.close()
+    })
+
+    test('Should be able to mock API response', async ()=>{
+        await driver.get('https://jsonblob.com/api');
+        await mockApi(driver, 'https://jsonblob.com/api/1246073154664521728', {'hello': 'world'});
+        
+        
+        console.log('mocking api')
+        const value = await driver.executeAsyncScript(`
+            const done = arguments[arguments.length - 1];
+            fetch('https://jsonblob.com/api/1246073154664521728', {
+                "headers": {
+                    "content-type": "application/json"
+                },
+                "method": "GET",
+            }).then(()=>{
+                console.log('response completed');
+                done(1);
+            });        
+        `)
+        console.log('done value:', value)
+        
+
     })
 
     afterAll(async ()=>{
